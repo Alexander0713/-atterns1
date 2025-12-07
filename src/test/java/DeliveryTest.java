@@ -1,4 +1,5 @@
 import com.codeborne.selenide.Configuration;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,11 +10,13 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static org.openqa.selenium.Keys.BACK_SPACE;
 
+
 public class DeliveryTest {
     private DataGenerator.UserInfo user;
 
     @BeforeEach
     void setUp() {
+        WebDriverManager.chromedriver().setup();
         Configuration.headless = false; // для локальной отладки
         Configuration.timeout = 15000;
         open("http://localhost:9999");
