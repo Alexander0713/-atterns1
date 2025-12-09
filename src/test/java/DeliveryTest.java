@@ -15,7 +15,6 @@ public class DeliveryTest {
 
     @BeforeEach
     void setUp() {
-
         open("http://localhost:9999");
         user = DataGenerator.Registration.generateUser("ru");
     }
@@ -25,7 +24,8 @@ public class DeliveryTest {
         // 1. Первая запись
         $("[data-test-id=city] input").setValue(user.getCity());
         $("[data-test-id=date] input").doubleClick().press(BACK_SPACE);
-        $("[data-test-id=date] input").setValue(DataGenerator.generateDate(4));
+        String firstDate = DataGenerator.generateDate(4);
+        $("[data-test-id=date] input").setValue(firstDate);
         $("[data-test-id=name] input").setValue(user.getName());
         $("[data-test-id=phone] input").setValue(user.getPhone());
         $("[data-test-id=agreement]").click();
@@ -34,11 +34,12 @@ public class DeliveryTest {
         $("[data-test-id=success-notification]")
                 .shouldBe(visible, Duration.ofSeconds(15))
                 .shouldHave(text("Успешно!"))
-                .shouldHave(text("Встреча успешно запланирована"));
+                .shouldHave(text("Встреча успешно запланирована на " + firstDate));
 
         // 2. Изменяем дату
         $("[data-test-id=date] input").doubleClick().press(BACK_SPACE);
-        $("[data-test-id=date] input").setValue(DataGenerator.generateDate(7));
+        String secondDate = DataGenerator.generateDate(7);
+        $("[data-test-id=date] input").setValue(secondDate);
         $(byText("Запланировать")).click();
 
         $("[data-test-id=replan-notification]")
@@ -49,6 +50,8 @@ public class DeliveryTest {
         $("[data-test-id=replan-notification] .button").click();
 
         $("[data-test-id=success-notification]")
-                .shouldBe(visible, Duration.ofSeconds(15));
+                .shouldBe(visible, Duration.ofSeconds(15))
+                .shouldHave(text("Успешно!"))
+                .shouldHave(text("Встреча успешно запланирована на " + secondDate));
     }
 }
